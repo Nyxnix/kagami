@@ -18,7 +18,9 @@ if [ ! -f kagami.icns ]; then
 fi
 
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
-swiftc -O -o "$APP/Contents/MacOS/kagami" kagami.swift
+# explicit target: beta toolchains default minos above the running OS,
+# and Finder refuses to launch the app ("can't use this version...")
+swiftc -O -target arm64-apple-macos14.0 -o "$APP/Contents/MacOS/kagami" kagami.swift
 cp Info.plist "$APP/Contents/"
 cp kagami.icns "$APP/Contents/Resources/"
 codesign --force -s - "$APP"
