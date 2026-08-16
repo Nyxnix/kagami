@@ -46,6 +46,7 @@ func rates(for m: Mode) -> [Double] {
 }
 
 var expectedFPS = 60.0   // drop-warning threshold tracks the selected rate
+let vivid = !CommandLine.arguments.contains("--accurate")
 
 // Must run AFTER startRunning: the session renegotiates the device format on start.
 func applyMode(_ m: Mode, fps: Double) {
@@ -83,6 +84,14 @@ final class VideoFeeder: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate 
                          fps, enqueued, refused, flushes, layer.status.rawValue,
                          layer.requiresFlushToResumeDecoding ? 1 : 0), stderr)
             frames = 0; enqueued = 0; refused = 0; flushes = 0; lastReport = now
+        }
+        // vivid (default): tag frames P3 so the compositor skips gamut mapping —
+        // matches the punch of direct HDMI / OBS's unmanaged preview on this panel.
+        // --accurate keeps the card's BT.709 tags (color-managed, technically correct).
+        if vivid, let pb = CMSampleBufferGetImageBuffer(sb) {
+            CVBufferSetAttachment(pb, kCVImageBufferColorPrimariesKey,
+                                  kCVImageBufferColorPrimaries_P3_D65, .shouldPropagate)
+            CVBufferRemoveAttachment(pb, kCVImageBufferCGColorSpaceKey)
         }
         if let atts = CMSampleBufferGetSampleAttachmentsArray(sb, createIfNecessary: true),
            CFArrayGetCount(atts) > 0 {
