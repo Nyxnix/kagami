@@ -19,6 +19,8 @@ func videoDevices() -> [AVCaptureDevice] {
 func audioDevices() -> [AVCaptureDevice] {
     AVCaptureDevice.DiscoverySession(
         deviceTypes: [.microphone], mediaType: .audio, position: .unspecified).devices
+        // transient CoreAudio-internal aggregates, not real inputs
+        .filter { !$0.localizedName.hasPrefix("CADefaultDeviceAggregate") }
 }
 
 var cam: AVCaptureDevice = {
