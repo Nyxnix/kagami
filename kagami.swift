@@ -301,7 +301,7 @@ view.wantsLayer = true
 let window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 1280, height: 720),
                       styleMask: [.titled, .closable, .miniaturizable, .resizable],
                       backing: .buffered, defer: false)
-window.title = cam.localizedName
+window.title = "kagami"
 window.contentView = view
 window.acceptsMouseMovedEvents = true
 window.center()
