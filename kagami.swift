@@ -318,6 +318,16 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 let delegate = AppDelegate()
 app.delegate = delegate
 
+// minimal main menu so ⌘Q (and ⌘W) work
+let mainMenu = NSMenu()
+let appMenuItem = NSMenuItem()
+mainMenu.addItem(appMenuItem)
+let appMenu = NSMenu()
+appMenu.addItem(NSMenuItem(title: "Close Window", action: #selector(NSWindow.performClose(_:)), keyEquivalent: "w"))
+appMenu.addItem(NSMenuItem(title: "Quit kagami", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
+appMenuItem.submenu = appMenu
+app.mainMenu = mainMenu
+
 session.startRunning()
 let startMode = modes.first(where: { $0.w == 2560 && $0.h == 1440 }) ?? modes.first ?? Mode(w: 1920, h: 1080)
 let startFPS = rates(for: startMode).first ?? 60
