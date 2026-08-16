@@ -15,10 +15,15 @@ at all.
 ## Build
 
 ```sh
-swiftc -O -o ~/.local/bin/kagami kagami.swift
+./build.sh
 ```
 
-Needs camera + microphone permission for your terminal on first run.
-Close OBS first — only one process gets the card.
+Builds `~/Applications/kagami.app` (icon, Dock presence, its own
+camera/mic permission identity — approve the prompts on first launch)
+and links `~/.local/bin/kagami` to it for the terminal. The icon is
+drawn by `icongen.swift`; delete `kagami.icns` to regenerate it.
+
+Close OBS first — only one process gets the card. `--accurate` disables
+the vivid P3 color tagging.
 
 Hard-won AVFoundation gotchas are commented where they live in the source.

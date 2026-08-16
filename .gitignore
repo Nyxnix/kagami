@@ -2,3 +2,5 @@
 kagami
 *.o
 .build/
+icon_1024.png
+kagami.iconset/
